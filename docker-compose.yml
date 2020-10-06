@@ -1,0 +1,79 @@
+version: '3'
+services:
+  #PHP Service
+  taperix-admin-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    container_name: taperix-admin-app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    depends_on:
+      - taperix-admin-db
+    networks:
+      - app-network
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+  #Nginx Service
+  taperix-admin-webserver:
+    image: nginx:alpine
+    container_name: taperix-admin-webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "81:80"
+    networks:
+      - app-network
+    depends_on:
+      - taperix-admin-app
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+  #MySQL Service
+  taperix-admin-db:
+    image: mysql:5.7.22
+    container_name: taperix-admin-db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3308:3306"
+    volumes:
+      - dbdata:/var/lib/mysql\
+      - ./mysql/:/etc/mysql/
+    environment:
+      MYSQL_DATABASE: taperix
+      MYSQL_ROOT_PASSWORD: rootpassword
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - app-network
+  #phpmyadmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - taperix-admin-db:mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 8070:80
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: rootpassword
+      PMA_HOST: taperix-admin-db
+    networks:
+      - app-network
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
