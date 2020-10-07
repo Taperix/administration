@@ -19,7 +19,6 @@ class InvoicePdfController extends Controller
         $data['logo'] = $image;
         try {
             $pdf = PDF::loadView('invoices.pdf', $data);
-            return view('invoices.pdf', $data);
             return $pdf->download('invoice.pdf');
         }catch(\ErrorException $errorException) {
             dd($errorException);
