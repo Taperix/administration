@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\InvoicePdfController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +22,5 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia\Inertia::render('Dashboard');
 })->name('dashboard');
+Route::resource('invoices', InvoiceController::class);
+Route::get('invoices/{invoice}/pdf', InvoicePdfController::class);
