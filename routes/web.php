@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoicePdfController;
+use App\Http\Controllers\ReadyInvoiceController;
+use App\Http\Controllers\SentInvoiceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,3 +26,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 Route::resource('invoices', InvoiceController::class);
 Route::get('invoices/{invoice}/pdf', InvoicePdfController::class);
+Route::get('invoices/{invoice}/pdf/preview', [InvoicePdfController::class, 'preview'])->name('invoices.pdf.preview');
+Route::put('invoices/{invoice}/sent', [SentInvoiceController::class, 'store']);
+Route::put('invoices/{invoice}/ready', [ReadyInvoiceController::class, 'store']);
