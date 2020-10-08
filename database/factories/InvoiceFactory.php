@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Invoice;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InvoiceFactory extends Factory
@@ -23,8 +24,9 @@ class InvoiceFactory extends Factory
     {
         return [
             'title' => $this->faker->realText(10),
-            'is_draft' => $this->faker->boolean,
-            'due_at' => now()->addWeeks(2)
+            'due_at' => now()->addWeeks(2),
+            'sent_when' => null,
+            'recipient_id' => User::first()->id
         ];
     }
 }
