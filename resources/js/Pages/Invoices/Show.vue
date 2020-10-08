@@ -17,15 +17,28 @@
                         <jet-input-error :message="form.error('title')" class="mt-2" />
                     </div>
 
-                    <button v-on:click="create" class="p-3 px-6 bg-blue-300 text-white rounded-full mt-4 self-align-end">
-                        Create
+                    <button v-on:click="save" class="p-3 px-6 bg-blue-300 text-white rounded-full mt-4 mr-4">
+                        Save
                     </button>
-                    <a :href="'/invoices/'+ invoice.id +'/pdf'" class="p-3 px-6 bg-blue-300 text-white rounded-full mt-4 self-align-end">
+                    <a :href="'/invoices/'+ invoice.id +'/pdf/preview'" class="p-3 px-6 bg-purple-700 text-white rounded-full mt-4 mr-4">
+                        PDF preview
+                    </a>
+                    <a :href="'/invoices/'+ invoice.id +'/pdf'" class="p-3 px-6 bg-blue-300 text-white rounded-full mt-4 mr-4">
                         to PDF
                     </a>
+                    <button v-on:click="ready" v-if="state === 'draft'" class="p-3 px-6 bg-green-300 text-white rounded-full mt-4 mr-4">
+                        ready
+                    </button>
+                    <button v-on:click="sent" v-if="state === 'ready'" class="p-3 px-6 bg-green-300 text-white rounded-full mt-4 mr-4">
+                        Sent
+                    </button>
                     <span title="Last updated">
                         <i class="fa fa-clock-o" aria-hidden="true"></i>
                         {{last_updated}}
+                    </span>
+                    <span title="Last updated" v-if="sent_when != null">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        {{sent_when}}
                     </span>
                 </div>
             </div>
@@ -43,11 +56,12 @@
     import JetLabel from './../../Jetstream/Label'
     import JetActionMessage from './../../Jetstream/ActionMessage'
     import JetSecondaryButton from './../../Jetstream/SecondaryButton'
-
     export default {
         props: [
             'invoice',
-            'last_updated'
+            'last_updated',
+            'state',
+            'sent_when',
         ],
         components: {
             AppLayout,
@@ -71,7 +85,30 @@
             }
         },
         methods: {
-            create() {
+            sent() {
+                this.$swal.fire({
+                    title: 'Are you sure?',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: `Save`,
+                    denyButtonText: `Don't save`,
+                }).then((result) => {
+                    if (!result.isConfirmed) {
+                        return;
+                    }
+
+                    this.form.put('/invoices/' + this.invoice.id + '/sent', {
+                        preserveScroll: true
+                    });
+
+                })
+            },
+            ready() {
+                this.form.put('/invoices/' + this.invoice.id + '/ready', {
+                    preserveScroll: true
+                });
+            },
+            save() {
                 this.form.put('/invoices/' + this.invoice.id, {
                     preserveScroll: true
                 });
