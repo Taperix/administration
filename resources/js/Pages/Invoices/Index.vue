@@ -33,7 +33,7 @@
                             <tr v-for="invoice in invoices">
                                 <td class="p-4 py-1">{{invoice.id}}</td>
                                 <td class="p-4 py-1">{{invoice.title}}</td>
-                                <td class="p-4 py-1">{{invoice.is_draft ? 'concept' : 'niet concept'}}</td>
+                                <td class="p-4 py-1">{{invoice.state}}</td>
                                 <td class="p-4 py-1">
                                     <a :href="'invoices/' + invoice.id" class="p-1 px-2 bg-blue-300 text-white text-sm rounded-full">
                                         <i class="fa fa-eye"></i> view
