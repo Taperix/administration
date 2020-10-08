@@ -17,9 +17,11 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->boolean('is_draft');
-            $table->dateTime('due_at');
+            $table->dateTime('due_at')->nullable();
+            $table->dateTime('sent_when')->nullable();
+            $table->string('state');
             $table->foreignIdFor(User::class,'salesman_id')->nullable();
+            $table->foreignIdFor(User::class,'recipient_id')->nullable();
             $table->timestamps();
         });
     }
