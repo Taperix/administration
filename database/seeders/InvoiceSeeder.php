@@ -16,9 +16,10 @@ class InvoiceSeeder extends Seeder
     public function run()
     {
         Invoice::factory()->count(20)->create()->each(function($invoice){
-            $invoice->items()->create(InvoiceItem::factory()->make()->toArray());
-            $invoice->items()->create(InvoiceItem::factory()->make()->toArray());
-            $invoice->items()->create(InvoiceItem::factory()->make()->toArray());
+            $data = InvoiceItem::factory()->make()->toArray();
+            $data['price'] = $data['price']['amount'];
+
+            $invoice->items()->create($data);
         });
     }
 }
