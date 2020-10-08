@@ -27,6 +27,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('invoices', InvoiceController::class);
     Route::get('invoices/{invoice}/pdf', InvoicePdfController::class);
     Route::get('invoices/{invoice}/pdf/preview', [InvoicePdfController::class, 'preview'])->name('invoices.pdf.preview');
-    Route::put('invoices/{invoice}/sent', [SentInvoiceController::class, 'store']);
-    Route::put('invoices/{invoice}/ready', [ReadyInvoiceController::class, 'store']);
+    Route::put('invoices/{invoice}/sent', [SentInvoiceController::class, 'store'])->name('invoices.states.sent');
+    Route::put('invoices/{invoice}/ready', [ReadyInvoiceController::class, 'store'])->name('invoices.states.ready');
 });
