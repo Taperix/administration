@@ -20,7 +20,9 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::all();
+        $invoices = Invoice::all()->each(function(Invoice $invoice) {
+           $invoice->state = $invoice->state->getShortDescription();
+        });
         return Inertia::render('Invoices/Index',[
             'invoices' => $invoices
         ]);
@@ -45,7 +47,6 @@ class InvoiceController extends Controller
     public function store(InvoiceStoreRequest $request)
     {
         $data = $request->validated();
-        $data['is_draft'] = true;
         $data['due_at'] = now()->addWeeks(2);
         $invoice = Invoice::create($data);
         return Redirect::route('invoices.show', ['invoice' => $invoice]);
@@ -60,9 +61,12 @@ class InvoiceController extends Controller
     public function show(Invoice $invoice)
     {
         $lastUpdated = $invoice->updated_at->diffForHumans();
+        $sentWhen = $invoice->sent_when === null ? null : $invoice->sent_when->diffForHumans();
         return Inertia::render('Invoices/Show', [
             'invoice' => $invoice,
             'last_updated' => $lastUpdated,
+            'sent_when' => $sentWhen,
+            'state' => $invoice->state->getShortDescription()
         ]);
     }
 
@@ -91,7 +95,6 @@ class InvoiceController extends Controller
     public function update(InvoiceUpdateRequest $request, Invoice $invoice)
     {
         $data = $request->validated();
-        $data['is_draft'] = true;
         $invoice->fill($data);
         $invoice->save();
 
