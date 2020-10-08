@@ -20,12 +20,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia\Inertia::render('Dashboard');
-})->name('dashboard');
-Route::resource('invoices', InvoiceController::class);
-Route::get('invoices/{invoice}/pdf', InvoicePdfController::class);
-Route::get('invoices/{invoice}/pdf/preview', [InvoicePdfController::class, 'preview'])->name('invoices.pdf.preview');
-Route::put('invoices/{invoice}/sent', [SentInvoiceController::class, 'store']);
-Route::put('invoices/{invoice}/ready', [ReadyInvoiceController::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/dashboard', function() {
+        return Inertia\Inertia::render('Dashboard');
+    });
+    Route::resource('invoices', InvoiceController::class);
+    Route::get('invoices/{invoice}/pdf', InvoicePdfController::class);
+    Route::get('invoices/{invoice}/pdf/preview', [InvoicePdfController::class, 'preview'])->name('invoices.pdf.preview');
+    Route::put('invoices/{invoice}/sent', [SentInvoiceController::class, 'store']);
+    Route::put('invoices/{invoice}/ready', [ReadyInvoiceController::class, 'store']);
+});
