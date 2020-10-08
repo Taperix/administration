@@ -2,6 +2,7 @@
 
 namespace App\Actions\Invoices;
 
+use App\Actions\ImageToBase64;
 use App\Models\Invoice;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Cache;
@@ -26,9 +27,7 @@ class GenerateInvoicePDF
         $data = [];
         $data['invoice'] = $this->invoice;
         $pdf = null;
-        $image = $this->imageToBase(config('company.logo'));
-        $data['logo'] = $image;
-
+        $data['logo'] = (new imageToBase64())->execute(config('company.logo'));
         $pdf = PDF::loadView('invoices.pdf', $data);
 
         $path = 'invoices/' . $this->invoice->id . '.pdf';
@@ -40,18 +39,5 @@ class GenerateInvoicePDF
 
     public function getPath() {
         return $this->path;
-    }
-
-    private function imageToBase($image)
-    {
-        if(Cache::has($image)) {
-            return Cache::get($image);
-        }
-        $type = pathinfo($image, PATHINFO_EXTENSION);
-        $data = file_get_contents($image);
-        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-        Cache::put($image, $base64, now()->addYear());
-
-        return $base64;
     }
 }
