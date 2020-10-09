@@ -10,6 +10,8 @@ class InvoiceItem extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['price', 'text', 'invoice_id'];
+
     public function getPriceAttribute($value) {
         return Money::EUR($value);
     }
