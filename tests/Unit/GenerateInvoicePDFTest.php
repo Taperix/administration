@@ -71,19 +71,18 @@ class GenerateInvoicePDFTest extends TestCase
         // setup
         User::factory()->create();
         $invoice = Invoice::factory()->create();
-        InvoiceItem::factory()->create([
+        $invoice->items()->create([
+            'text' => '',
             'price' => 100,
-             'invoice_id' => $invoice->id
         ]);
-        InvoiceItem::factory()->create([
+        $invoice->items()->create([
+            'text' => '',
             'price' => 100,
-            'invoice_id' => $invoice->id
         ]);
-        InvoiceItem::factory()->create([
+        $invoice->items()->create([
+            'text' => '',
             'price' => 100,
-            'invoice_id' => $invoice->id
         ]);
-
         //action
         $generator = new GenerateInvoicePDF($invoice);
         $generator->execute();

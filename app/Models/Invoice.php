@@ -37,7 +37,7 @@ class Invoice extends Model
     }
 
     public function items() {
-        return $this->hasMany(InvoiceItem::class);
+        return $this->belongsToMany(InvoiceItem::class);
     }
 
     public function calcTotal() {
