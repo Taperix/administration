@@ -13,9 +13,15 @@
                     <!-- Name -->
                     <div class="col-span-6 sm:col-span-4">
                         <jet-label for="title" value="Title" />
-                        <jet-input id="title" type="text" class="mt-1 block w-full" v-model="form.title" autocomplete="title" />
+                        <jet-input id="title" readonly class="mt-1 block w-full" v-model="form.title" autocomplete="title" />
                         <jet-input-error :message="form.error('title')" class="mt-2" />
                     </div>
+
+                    <div class="col-span-6 sm:col-span-4 mt-2">
+                        <jet-label for="items" value="Items" />
+                        <invoice-item-selector :allItems="items" :selectedItems="items" :readonly="true"></invoice-item-selector>
+                    </div>
+
 
                     <button v-on:click="save" class="p-3 px-6 bg-blue-300 text-white rounded-full mt-4 mr-4">
                         Save
@@ -56,12 +62,15 @@
     import JetLabel from './../../Jetstream/Label'
     import JetActionMessage from './../../Jetstream/ActionMessage'
     import JetSecondaryButton from './../../Jetstream/SecondaryButton'
+    import invoiceItemSelector from '../../InvoiceItemSelector'
+
     export default {
         props: [
             'invoice',
             'last_updated',
             'state',
             'sent_when',
+            'items'
         ],
         components: {
             AppLayout,
@@ -73,6 +82,7 @@
             JetInputError,
             JetLabel,
             JetSecondaryButton,
+            invoiceItemSelector,
         },
         data() {
             return {

@@ -17,6 +17,12 @@
                         <jet-input-error :message="form.error('title')" class="mt-2" />
                     </div>
 
+
+                    <div class="col-span-6 sm:col-span-4 mt-2">
+                        <jet-label for="items" value="Items" />
+                        <invoice-item-selector :allItems="items" :selectedItems="items" v-on:itemsUpdated="updateItems"></invoice-item-selector>
+                    </div>
+
                     <button v-on:click="create" class="p-3 px-6 bg-blue-300 text-white rounded-full mt-4 self-align-end">
                         Create
                     </button>
@@ -40,11 +46,13 @@
     import JetLabel from './../../Jetstream/Label'
     import JetActionMessage from './../../Jetstream/ActionMessage'
     import JetSecondaryButton from './../../Jetstream/SecondaryButton'
+    import invoiceItemSelector from '../../InvoiceItemSelector'
 
     export default {
         props: [
             'invoice',
-            'last_updated'
+            'last_updated',
+            'items'
         ],
         components: {
             AppLayout,
@@ -56,11 +64,13 @@
             JetInputError,
             JetLabel,
             JetSecondaryButton,
+            invoiceItemSelector,
         },
         data() {
             return {
                 form: this.$inertia.form({
                     title: this.invoice.title,
+                    items: this.invoice.items,
                 }, {
                     bag: 'createInvoice',
                     resetOnSuccess: false,
@@ -68,6 +78,9 @@
             }
         },
         methods: {
+            updateItems(items) {
+                this.form.items = items;
+            },
             create() {
                 this.form.put('/invoices/' + this.invoice.id, {
                     preserveScroll: true

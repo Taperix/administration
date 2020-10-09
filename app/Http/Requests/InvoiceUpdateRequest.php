@@ -25,6 +25,7 @@ class InvoiceUpdateRequest extends FormRequest
     {
         return [
             'title' => 'required',
+            'items' => 'nullable|array'
         ];
     }
 }

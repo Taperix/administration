@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InvoiceStoreRequest;
 use App\Http\Requests\InvoiceUpdateRequest;
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -66,7 +67,8 @@ class InvoiceController extends Controller
             'invoice' => $invoice,
             'last_updated' => $lastUpdated,
             'sent_when' => $sentWhen,
-            'state' => $invoice->state->getShortDescription()
+            'state' => $invoice->state->getShortDescription(),
+            'items' => InvoiceItem::all(),
         ]);
     }
 
@@ -74,7 +76,7 @@ class InvoiceController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param Invoice $invoice
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Invoice $invoice)
     {
@@ -82,6 +84,7 @@ class InvoiceController extends Controller
         return Inertia::render('Invoices/Edit', [
             'invoice' => $invoice,
             'last_updated' => $lastUpdated,
+            'items' => InvoiceItem::all(),
         ]);
     }
 
@@ -95,6 +98,10 @@ class InvoiceController extends Controller
     public function update(InvoiceUpdateRequest $request, Invoice $invoice)
     {
         $data = $request->validated();
+
+        $ids = collect($data['items'])->map(function($item) { return $item['id']; });
+        $invoice->items()->sync($ids);
+
         $invoice->fill($data);
         $invoice->save();
 

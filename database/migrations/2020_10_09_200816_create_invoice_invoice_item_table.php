@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\Invoice;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInvoiceItemsTable extends Migration
+class CreateInvoiceInvoiceItemTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +13,10 @@ class CreateInvoiceItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoice_items', function (Blueprint $table) {
+        Schema::create('invoice_invoice_item', function (Blueprint $table) {
             $table->id();
-            $table->text('text');
-            $table->bigInteger('price')->comment('in cents');
+            $table->foreignId('invoice_id')->references('id')->on('invoices');
+            $table->foreignId('invoice_item_id')->references('id')->on('invoice_items');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateInvoiceItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoice_items');
+        Schema::dropIfExists('invoice_invoice_item');
     }
 }
