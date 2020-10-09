@@ -37,9 +37,9 @@ class InvoiceTotalCalculationTest extends TestCase
     /** @test */
     public function returnsTheRightAmountWith1Item()
     {
-        InvoiceItem::factory()->create([
-            'invoice_id' => $this->invoice->id,
-            'price' => 100
+        $this->invoice->items()->create([
+            'text' => '',
+            'price' => 100,
         ]);
         $this->assertSame(100, (int) $this->invoice->calcTotal()->getAmount());
     }
@@ -47,17 +47,17 @@ class InvoiceTotalCalculationTest extends TestCase
     /** @test */
     public function returnsTheRightAmountWithMultipleItems()
     {
-        InvoiceItem::factory()->create([
-            'invoice_id' => $this->invoice->id,
-            'price' => 100
+        $this->invoice->items()->create([
+            'text' => '',
+            'price' => 100,
         ]);
-        InvoiceItem::factory()->create([
-            'invoice_id' => $this->invoice->id,
-            'price' => 100
+        $this->invoice->items()->create([
+            'text' => '',
+            'price' => 100,
         ]);
-        InvoiceItem::factory()->create([
-            'invoice_id' => $this->invoice->id,
-            'price' => 100
+        $this->invoice->items()->create([
+            'text' => '',
+            'price' => 100,
         ]);
         $this->assertSame(300, (int) $this->invoice->calcTotal()->getAmount());
     }
