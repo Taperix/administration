@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BunqController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoicePdfController;
 use App\Http\Controllers\ReadyInvoiceController;
@@ -21,9 +23,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/dashboard', function() {
-        return Inertia\Inertia::render('Dashboard');
-    });
+    Route::get('/dashboard', DashboardController::class);
     Route::resource('invoices', InvoiceController::class);
     Route::get('invoices/{invoice}/pdf', InvoicePdfController::class);
     Route::get('invoices/{invoice}/pdf/preview', [InvoicePdfController::class, 'preview'])->name('invoices.pdf.preview');
