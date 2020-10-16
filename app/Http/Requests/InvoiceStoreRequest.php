@@ -24,7 +24,8 @@ class InvoiceStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required'
+            'title' => 'required',
+            'incoming' => 'boolean',
         ];
     }
 }
