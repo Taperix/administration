@@ -16,6 +16,11 @@
                         <jet-input id="title" type="text" class="mt-1 block w-full" v-model="form.title" autocomplete="title" />
                         <jet-input-error :message="form.error('title')" class="mt-2" />
                     </div>
+                    <div class="col-span-6 sm:col-span-4">
+                        <jet-label for="incoming" value="incoming" />
+                        <input id="incoming" type="checkbox" class="mt-1 w-8 h-8" v-model="form.incoming" autocomplete="incoming" />
+                        <jet-input-error :message="form.error('incoming')" class="mt-2" />
+                    </div>
 
                     <button v-on:click="create" class="p-3 px-6 bg-blue-300 text-white rounded-full mt-4 self-align-end">
                         Create
@@ -56,6 +61,7 @@
             return {
                 form: {
                     title: "",
+                    incoming: false,
                     error: this.gotError
                 },
             }
