@@ -8,7 +8,7 @@
             </div>
         </div>
         <select :readonly="readonly" v-model="current" name="items" id="items" class="form-input p-2 rounded-md shadow-sm mt-1 block w-full">
-            <option v-for="item in allItems" :key="item.id" :value="item" class="p-2">
+            <option v-for="item in allItems" :key="genRandomKey()" :value="item" class="p-2">
                 {{item.text}}
             </option>
         </select>
@@ -36,12 +36,13 @@
         props: ['allItems', 'selectedItems', 'readonly'],
         methods: {
             addItem() {
-                this.currentItems.push(this.current);
-                this.$emit('itemsUpdated', this.currentItems);
+                this.selectedItems.push(this.current);
+                this.$emit('itemsUpdated', this.selectedItems);
             },
             removeItem(item) {
-                this.currentItems.remove(item);
-                this.$emit('itemsUpdated', this.currentItems);
+                const index = this.selectedItems.indexOf(item);
+                if (index > -1) { this.selectedItems.splice(index, 1) }
+                this.$emit('itemsUpdated', this.selectedItems);
             },
             makeRandom(length) {
                 var result = '';
