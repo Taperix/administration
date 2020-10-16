@@ -12,7 +12,13 @@ class InvoiceItem extends Model
 
     protected $fillable = ['price', 'text'];
 
+    protected $touches = ['invoice'];
+
     public function getPriceAttribute($value) {
         return Money::EUR($value);
+    }
+
+    public function invoice() {
+        return $this->belongsToMany(Invoice::class);
     }
 }
