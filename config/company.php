@@ -6,4 +6,7 @@ return [
     'address' => 'Hoge bergweg 16',
     'city' => 'Beekbergen',
     'zipcode' => '7361 GS',
+    'bunq' => [
+        'apiKey' => env('BUNQ_API_KEY', '')
+    ]
 ];
