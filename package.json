@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.1",
-        "vue-sweetalert2": "^3.0.8"
+        "vue-sweetalert2": "^3.0.8",
+        "vue-tabs-component": "^1.5.0"
     }
 }
