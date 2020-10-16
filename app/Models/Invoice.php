@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\States\Invoices\DraftState;
 use App\States\Invoices\InvoiceState;
+use App\States\Invoices\PaidState;
 use App\States\Invoices\ReadyState;
+use App\States\Invoices\ReceivedState;
 use App\States\Invoices\SentState;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +17,7 @@ class Invoice extends Model
 {
     use HasFactory, HasStates;
 
-    protected $fillable = ['title', 'due_at'];
+    protected $fillable = ['title', 'due_at', 'due_at', 'sent_when', 'updated_at', 'created_at'];
 
     protected $dates = ['due_at', 'sent_when', 'updated_at', 'created_at'];
 
@@ -24,6 +26,8 @@ class Invoice extends Model
         $this
             ->addState('state', InvoiceState::class)
             ->default(DraftState::class)
+            ->allowTransition(DraftState::class, ReceivedState::class)
+            ->allowTransition(ReceivedState::class, PaidState::class)
             ->allowTransition(DraftState::class, ReadyState::class)
             ->allowTransition(ReadyState::class, SentState::class);
     }
