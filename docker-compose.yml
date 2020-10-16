@@ -47,7 +47,7 @@ services:
       - dbdata:/var/lib/mysql\
       - ./mysql/:/etc/mysql/
     environment:
-      MYSQL_DATABASE: taperix
+      MYSQL_DATABASE: taperix_admin
       MYSQL_ROOT_PASSWORD: rootpassword
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
