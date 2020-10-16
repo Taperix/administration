@@ -20,7 +20,7 @@
 
                     <div class="col-span-6 sm:col-span-4 mt-2">
                         <jet-label for="items" value="Items" />
-                        <invoice-item-selector :allItems="items" :selectedItems="items" v-on:itemsUpdated="updateItems"></invoice-item-selector>
+                        <invoice-item-selector :allItems="all_items" :selectedItems="items" v-on:itemsUpdated="updateItems"></invoice-item-selector>
                     </div>
 
                     <button v-on:click="create" class="p-3 px-6 bg-blue-300 text-white rounded-full mt-4 self-align-end">
@@ -52,7 +52,8 @@
         props: [
             'invoice',
             'last_updated',
-            'items'
+            'items',
+            'all_items'
         ],
         components: {
             AppLayout,
@@ -70,7 +71,7 @@
             return {
                 form: this.$inertia.form({
                     title: this.invoice.title,
-                    items: this.invoice.items,
+                    items: this.items,
                 }, {
                     bag: 'createInvoice',
                     resetOnSuccess: false,
